@@ -1,0 +1,287 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  color: #333;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px; /* Add padding for spacing */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+h1 {
+  margin: 0; /* Remove default margin */
+  text-align: center; /* Center align the text */
+  flex: 1; /* Occupy remaining space */
+}
+
+form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: auto;
+}
+
+label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#lowpass_cutoff {
+  display: block; /* Ensure the input field starts from the left */
+  width: 100%;
+  max-width: 480px; /* Set the maximum width to 300px or any desired value */
+  padding: 8px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  margin: 5px 0 10px;
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.5);
+}
+
+.checkbox-container label {
+  margin: 0;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1000; /* Ensure the tooltip appears above other elements if necessary */
+  left: 50%;
+  margin-left: -100px; /* Center the tooltip */
+  opacity: 0;
+  transition: opacity 0.3s, top 0.3s ease, bottom 0.3s ease; /* Smooth transition for visibility and position */
+  pointer-events: none; /* Prevent the tooltip from being interactive */
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Tooltip position above */
+.tooltip-above {
+  bottom: 150%;
+}
+
+.tooltip-container:hover .tooltip-above {
+  bottom: 120%;
+}
+
+/* Tooltip position below */
+.tooltip-below {
+  top: 150%;
+}
+
+.tooltip-container:hover .tooltip-below {
+  top: 120%;
+}
+
+/* Define the keyframes for fadeIn animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px; /* Adjust to a value that exceeds the content height */
+  }
+}
+
+/* CSS for fadeIn animation class */
+.fade-in {
+  animation: fadeIn 0.5s forwards;
+}
+
+/* Define the keyframes for fadeOut animation */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    max-height: 500px; /* Adjust to a value that exceeds the content height */
+  }
+  to {
+    opacity: 0;
+    max-height: 0;
+  }
+}
+
+/* CSS for fadeOut animation class */
+.fade-out {
+  animation: fadeOut 0.5s forwards;
+}
+
+/* Ensure the element is hidden initially */
+#advanced-options-content {
+  overflow: hidden; /* Ensure content does not overflow */
+  max-height: 0;
+  opacity: 0;
+  display: none;
+}
+
+.advanced-options {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.advanced-options button {
+  background: #28a745;
+  margin-bottom: 10px;
+}
+
+.advanced-options button:hover {
+  background: #218838;
+}
+
+.dark-mode-toggle {
+  position: relative; /* Position absolute to place the toggle on the top right */
+  right: 20px; /* Adjust as needed */
+  top: 50%; /* Vertically center */
+  transform: translateY(-50%);
+}
+
+/* Hide the default checkbox */
+.dark-mode-toggle input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.dark-mode {
+  background: #333;
+  color: #f4f4f4;
+}
+
+.dark-mode .header,
+.dark-mode form {
+  background: #444;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  color: #f4f4f4;
+}
+
+.dark-mode input[type="text"],
+.dark-mode input[type="number"],
+.dark-mode select {
+  background: #555;
+  color: #f4f4f4;
+  border: 1px solid #666;
+}
+
+.dark-mode button {
+  background: #0068d8;
+}
+
+.dark-mode .advanced-options button {
+  background: #8930c8;
+  margin-bottom: 10px;
+}
+
+.dark-mode .advanced-options button:hover {
+  background: #871aa5;
+}
+
+.switch {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  transform: translateY(-50%);
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.switch:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+input:checked + .switch {
+  background-color: #007bff;
+}
+
+input:checked + .switch:before {
+  transform: translateX(26px);
+}

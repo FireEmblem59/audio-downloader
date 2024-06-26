@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Audio Manipulation Tool</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{ url_for('static', filename='logo.png') }}"
+    />
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" />
+        <h1>Audio Manipulation Tool</h1>
+      </div>
+      <div class="dark-mode-toggle">
+        <input type="checkbox" id="dark_mode" onclick="toggleDarkMode()" />
+        <label for="dark_mode" class="switch"></label>
+      </div>
+    </div>
+    <br />
+
+    <form action="/download" method="post">
+      <label for="url">YouTube URL:</label>
+      <input type="text" id="url" name="url" required /><br />
+
+      <label for="custom_name">Custom Output Name:</label>
+      <input type="text" id="custom_name" name="custom_name" /><br />
+
+      <label for="effect">Effect:</label>
+      <select id="effect" name="effect" onchange="setEffectDefaults()">
+        <option value="keep_original">Keep Original</option>
+        <option value="slowed_reversed">Slowed & Reversed</option>
+        <option value="sped_up">Sped Up</option></select
+      ><br />
+
+      <label for="speed_ratio"
+        >Speed Ratio:
+        <span class="tooltip"
+          >?
+          <span class="tooltiptext tooltip-above"
+            >Adjusts the speed of the audio. Values &lt;1 slow down the audio,
+            &gt;1 speed it up.</span
+          >
+        </span>
+      </label>
+      <input
+        type="number"
+        id="speed_ratio"
+        name="speed_ratio"
+        value="1.0"
+        step="0.1"
+      /><br />
+
+      <label for="pitch_shift"
+        >Pitch Shift:
+        <span class="tooltip"
+          >?
+          <span class="tooltiptext tooltip-above"
+            >Adjusts the pitch of the audio. Positive values increase the pitch,
+            negative values decrease it.</span
+          >
+        </span>
+      </label>
+      <input
+        type="number"
+        id="pitch_shift"
+        name="pitch_shift"
+        value="0"
+      /><br />
+
+      <div class="advanced-options">
+        <button type="button" onclick="toggleAdvancedOptions()">
+          Advanced Options
+        </button>
+        <div id="advanced-options-content" style="display: none">
+          <label for="lowpass_cutoff"
+            >Lowpass Cutoff:
+            <span class="tooltip"
+              >?
+              <span class="tooltiptext tooltip-below"
+                >Filters out frequencies above the specified cutoff.</span
+              >
+            </span>
+          </label>
+          <input
+            type="number"
+            id="lowpass_cutoff"
+            name="lowpass_cutoff"
+            value="3500"
+          /><br />
+
+          <div class="checkbox-container">
+            <input type="checkbox" id="bass_boost" name="bass_boost" />
+            <label for="bass_boost"
+              >Bass Boost
+              <span class="tooltip"
+                >?
+                <span class="tooltiptext tooltip-above"
+                  >Increases the bass frequencies of the audio.</span
+                >
+              </span> </label
+            ><br />
+          </div>
+
+          <div class="checkbox-container">
+            <input type="checkbox" id="gain_db" name="gain_db" />
+            <label for="gain_db"
+              >Gain (dB)
+              <span class="tooltip"
+                >?
+                <span class="tooltiptext tooltip-above"
+                  >Increases or decreases the volume of the audio.</span
+                >
+              </span> </label
+            ><br />
+          </div>
+
+          <div class="checkbox-container">
+            <input type="checkbox" id="oops" name="oops" />
+            <label for="oops"
+              >Oops Effect
+              <span class="tooltip"
+                >?
+                <span class="tooltiptext tooltip-above"
+                  >Reduces the center channel, often used to create a karaoke
+                  effect.</span
+                >
+              </span> </label
+            ><br />
+          </div>
+
+          <div class="checkbox-container">
+            <input type="checkbox" id="phaser" name="phaser" />
+            <label for="phaser"
+              >Phaser
+              <span class="tooltip"
+                >?
+                <span class="tooltiptext tooltip-above"
+                  >Applies a phaser effect to the audio, creating a sweeping
+                  sound.</span
+                >
+              </span> </label
+            ><br />
+          </div>
+
+          <div class="checkbox-container">
+            <input type="checkbox" id="tremolo" name="tremolo" />
+            <label for="tremolo"
+              >Tremolo
+              <span class="tooltip"
+                >?
+                <span class="tooltiptext tooltip-above"
+                  >Applies a tremolo effect to the audio, modulating its
+                  amplitude.</span
+                >
+              </span> </label
+            ><br />
+          </div>
+
+          <div class="checkbox-container">
+            <input type="checkbox" id="compand" name="compand" />
+            <label for="compand"
+              >Compand
+              <span class="tooltip"
+                >?
+                <span class="tooltiptext tooltip-above"
+                  >Applies compression and expansion to the audio, balancing its
+                  dynamic range.</span
+                >
+              </span> </label
+            ><br />
+          </div>
+
+          <div class="checkbox-container">
+            <input type="checkbox" id="no_reverb" name="no_reverb" />
+            <label for="no_reverb"
+              >No Reverb
+              <span class="tooltip"
+                >?
+                <span class="tooltiptext tooltip-above"
+                  >Disables the reverb effect, making the audio sound
+                  drier.</span
+                >
+              </span> </label
+            ><br />
+          </div>
+        </div>
+      </div>
+
+      <button type="submit">Download</button>
+    </form>
+
+    <script>
+      function toggleDarkMode() {
+        var element = document.body;
+        element.classList.toggle("dark-mode");
+      }
+
+      function toggleAdvancedOptions() {
+        var x = document.getElementById("advanced-options-content");
+
+        if (x.style.display === "none" || x.style.display === "") {
+          // If element is hidden, prepare it for fadeIn animation
+          x.style.display = "block"; // Make element visible
+          x.style.opacity = 0; // Set initial opacity to 0
+          x.style.maxHeight = "0"; // Set initial max-height to 0
+
+          setTimeout(function () {
+            x.classList.remove("fade-out"); // Remove fade-out class if it exists
+            x.classList.add("fade-in"); // Add fadeIn class to trigger animation
+            x.style.opacity = 1; // Set final opacity to 1
+            x.style.maxHeight = "500px"; // Set final max-height to a value that fits the content
+          }, 10); // Slight delay to apply initial styles before animation
+
+          // Remove fadeIn class after animation completes
+          setTimeout(function () {
+            x.classList.remove("fade-in");
+            x.style.maxHeight = "none"; // Allow content to expand fully
+          }, 510); // Slightly longer than animation duration (0.5s = 500ms)
+        } else {
+          // If element is visible, hide it with fadeOut animation
+          x.classList.remove("fade-in"); // Remove fadeIn class if it exists
+          x.classList.add("fade-out"); // Add fadeOut class to trigger animation
+
+          // After animation completes, hide the element
+          setTimeout(function () {
+            x.style.display = "none";
+            x.classList.remove("fade-out"); // Remove fade-out class after hiding
+            x.style.maxHeight = "0"; // Reset max-height for next toggle
+          }, 500); // Should match animation duration (0.5s = 500ms)
+        }
+      }
+
+      function setEffectDefaults() {
+        var effect = document.getElementById("effect").value;
+        var speed_ratio = document.getElementById("speed_ratio");
+        var pitch_shift = document.getElementById("pitch_shift");
+        if (effect == "slowed_reversed") {
+          speed_ratio.value = 0.75;
+          pitch_shift.value = -75;
+        } else if (effect == "sped_up") {
+          speed_ratio.value = 1.25;
+          pitch_shift.value = 75;
+        } else {
+          speed_ratio.value = 1.0;
+          pitch_shift.value = 0;
+        }
+      }
+    </script>
+  </body>
+</html>
